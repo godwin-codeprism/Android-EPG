@@ -1,5 +1,0 @@
-rootProject.name = 'epg_poc'
-include ':react-native-mediafirst'
-project(':react-native-mediafirst').projectDir = new File(rootProject.projectDir, '../lib/react-native-mediafirst/android')
-apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
-include ':app'
