@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--    Created by Godwin Vinny Carole K on Tue, 10 Sep 2019 at 21:34.-->
+<!--    Copyright (c) Code Prism Technologies Pvt Ltd-->
+<resources>
+
+    <style name="ScrollbarRecyclerView" parent="android:Widget">
+        <item name="android:scrollbars">horizontal</item>
+    </style>
+
+</resources>
