@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements ChildFocusListene
         init();
     }
 
+
     public void init() {
         rootView = findViewById(R.id.rootView);
         ArrayList shows = new ArrayList<String>();
