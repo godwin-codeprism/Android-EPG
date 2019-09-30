@@ -8,6 +8,9 @@ import android.view.ViewParent;
 import com.grv_app.cell.EPGCell;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class GuideUtils {
     private static final int INVALID_INDEX = -1;
     private static int sWidthPerHour = 0;
+    private static final long ONE_DAY_MS = TimeUnit.DAYS.toMillis(1);
 
     /**
      * Sets the width in pixels that corresponds to an hour in program guide. Assume that this is
@@ -141,4 +145,26 @@ public class GuideUtils {
     }
 
     private GuideUtils() {}
+
+    /**
+     * Checks if two given time (in milliseconds) are in the same day with regard to the locale
+     * timezone.
+     */
+    public static boolean isInGivenDay(long dayToMatchInMillis, long subjectTimeInMillis) {
+        TimeZone timeZone = Calendar.getInstance().getTimeZone();
+        long offset = timeZone.getRawOffset();
+        if (timeZone.inDaylightTime(new Date(dayToMatchInMillis))) {
+            offset += timeZone.getDSTSavings();
+        }
+        return GuideUtils.floorTime(dayToMatchInMillis + offset, ONE_DAY_MS)
+                == GuideUtils.floorTime(subjectTimeInMillis + offset, ONE_DAY_MS);
+    }
+
+    /**
+     * Floors time to the given {@code timeUnit}. For example, if time is 5:32:11 and timeUnit is
+     * one hour (60 * 60 * 1000), then the output will be 5:00:00.
+     */
+    public static long floorTime(long timeMs, long timeUnit) {
+        return timeMs - (timeMs % timeUnit);
+    }
 }

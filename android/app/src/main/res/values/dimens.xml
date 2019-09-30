@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="program_guide_table_header_row_overlap">-72dp</dimen>
+</resources>

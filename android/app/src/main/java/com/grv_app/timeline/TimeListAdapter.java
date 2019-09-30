@@ -1,38 +1,27 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+package com.grv_app.timeline;
+
+/**
+ * Created by Godwin Vinny Carole K on Wed, 25 Sep 2019 at 11:40.
+ * Copyright (c) Code Prism Technologies Pvt Ltd
  */
 
-package com.android.tv.guide;
-
 import android.content.res.Resources;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.android.tv.R;
-import com.android.tv.util.Utils;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.grv_app.R;
+import com.grv_app.utils.GuideUtils;
+
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Adapts the time range from {@link ProgramManager} to the timeline header row of the program guide
- * table.
- */
+
 class TimeListAdapter extends RecyclerView.Adapter<TimeListAdapter.TimeViewHolder> {
     private static final long TIME_UNIT_MS = TimeUnit.MINUTES.toMillis(30);
 
@@ -73,7 +62,7 @@ class TimeListAdapter extends RecyclerView.Adapter<TimeListAdapter.TimeViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        return R.layout.program_guide_table_header_row_item;
+        return R.layout.guide_table_header_row_item;
     }
 
     @Override
@@ -84,7 +73,7 @@ class TimeListAdapter extends RecyclerView.Adapter<TimeListAdapter.TimeViewHolde
         View itemView = holder.itemView;
         Date timeDate = new Date(startTime);
         String timeString;
-        if (Utils.isInGivenDay(System.currentTimeMillis(), startTime)) {
+        if (GuideUtils.isInGivenDay(System.currentTimeMillis(), startTime)) {
             timeString = DateFormat.format(mTimePatternSameDay, timeDate).toString();
         } else {
             timeString = DateFormat.format(mTimePatternDifferentDay, timeDate).toString();
