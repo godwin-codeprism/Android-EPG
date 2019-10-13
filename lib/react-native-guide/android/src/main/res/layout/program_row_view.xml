@@ -3,7 +3,6 @@
     android:id="@+id/ProgramRowContainer"
     android:layout_width="160dp"
     android:layout_height="60dp"
-    android:focusable="false"
     android:orientation="horizontal"
     >
 
@@ -13,26 +12,15 @@
         android:layout_height="60dp"
         android:focusable="false"
         android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fuck you"
-            />
+
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ChildGridContainer"
         android:layout_width="100dp"
         android:layout_height="60dp"
-        android:focusable="false"
         android:orientation="vertical"
         >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fuck you"
-            />
 
     </LinearLayout>
 

@@ -2,15 +2,19 @@ package com.reactlibrary.ParentGridView;
 
 import android.content.Context;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
+import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.react.bridge.ReactContext;
@@ -24,6 +28,7 @@ import com.facebook.react.views.scroll.ScrollEventType;
 import com.facebook.react.views.scroll.VelocityHelper;
 import com.reactlibrary.R;
 import com.reactlibrary.GridItem.GridItem;
+import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 import com.reactlibrary.Utils.VisibleItemsChangeEvent;
 
 /**
@@ -88,10 +93,35 @@ public class ParentGridView extends RecyclerView {
 //        super(context);
         setHasFixedSize(true);
         ((DefaultItemAnimator)getItemAnimator()).setSupportsChangeAnimations(false);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context){
+            @Override
+            public boolean onRequestChildFocus(@NonNull RecyclerView parent, @NonNull State state, @NonNull View child, @Nullable View focused) {
+                final int firstIndex = ((LinearLayoutManager) getLayoutManager()).findFirstVisibleItemPosition();
+                final int lastIndex = ((LinearLayoutManager) getLayoutManager()).findLastVisibleItemPosition();
+                if(child instanceof RecyclableWrapperViewGroup && getFocusedChild() != null){
+                    final int prevIndex = ((RecyclableWrapperViewGroup) getFocusedChild()).getChildIndex();
+                    final int currentIndex = ((RecyclableWrapperViewGroup) child).getChildIndex();
+                    final int centerPoint = (firstIndex + lastIndex) / 2;
+                    final int scrollIndex = firstIndex + (currentIndex - prevIndex);
+//                    Log.i("Godwin", "scrollIndex "+ scrollIndex + " center "+ centerPoint + " prevIndex " + prevIndex +" currentIndex "+ currentIndex + " Adjustment " + (currentIndex - (currentIndex - prevIndex)));
+                    if(currentIndex >= centerPoint && prevIndex < currentIndex && scrollIndex > 0){
+                        parent.smoothScrollToPosition(scrollIndex);
+                    }else if(currentIndex <= centerPoint && prevIndex > currentIndex && scrollIndex > 0){
+                        parent.smoothScrollToPosition(scrollIndex);
+                    }
+                    else if(currentIndex - prevIndex != 1 && currentIndex - prevIndex != -1 && scrollIndex > 0){
+                       // Log.i("Godwin", "Skipped - scrollIndex "+ scrollIndex + " center "+ centerPoint + " prevIndex " + prevIndex +" currentIndex "+ currentIndex + " Adjustment " + (currentIndex - (currentIndex - prevIndex)));
+                        parent.smoothScrollToPosition(scrollIndex);
+                    }
+
+                }
+                return super.onRequestChildFocus(parent, state, child, focused);
+            }
+        };
 //        linearLayoutManager.setOrientation(HORIZONTAL);
         setLayoutManager(linearLayoutManager);
         setAdapter(new ParentGridAdapter(this));
+        setClipToPadding(false);
     }
 
     /*package*/ void addViewToAdapter(GridItem child, int index) {

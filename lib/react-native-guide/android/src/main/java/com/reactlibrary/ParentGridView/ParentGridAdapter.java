@@ -53,6 +53,7 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
     @Override
     public void onBindViewHolder(ParentGridViewHolder holder, int position) {
         RecyclableWrapperViewGroup vg = (RecyclableWrapperViewGroup) holder.itemView;
+        vg.setChildIndex(position);
         View row = getViewByItemIndex(position);
         if (row != null && row.getParent() != vg) {
             if (row.getParent() != null) {

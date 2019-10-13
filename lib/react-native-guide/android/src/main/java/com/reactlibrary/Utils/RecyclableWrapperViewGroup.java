@@ -18,6 +18,7 @@ public class RecyclableWrapperViewGroup extends ViewGroup {
     private VerticalGridView.Adapter mAdapter;
     private int mLastMeasuredWidth;
     private int mLastMeasuredHeight;
+    private int childIndex;
 
     public RecyclableWrapperViewGroup(Context context, VerticalGridView.Adapter adapter) {
         super(context);
@@ -87,5 +88,13 @@ public class RecyclableWrapperViewGroup extends ViewGroup {
         // in this way we can exactly know when the drag starts because "onInterceptTouchEvent"
         // of the RecyclerView will return true.
         return true;
+    }
+
+    public void setChildIndex(int childIndex) {
+        this.childIndex = childIndex;
+    }
+
+    public int getChildIndex() {
+        return childIndex;
     }
 }

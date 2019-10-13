@@ -23,14 +23,14 @@ class App extends React.Component {
           <EPGView
             timeBlocks={timeBlocksData}
             renderTimeBlocks={({ item, index }) => (
-              <View style={{ width: 135, height: 60, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black', borderColor: 'grey', borderWidth: 1 }}>
+              <View style={{ width: 135, height: 40, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black', borderColor: 'grey', borderWidth: 1 }}>
                 <Text style={{ color: 'white' }}>{item}</Text>
               </View>
             )}
             programRows={channelsData}
             renderProgramRows={({ item, index }) => (
-              <ProgramRowView style={{ width: '100%', height: 60, backgroundColor: 'orange', flexDirection: 'row' }}>
-                <ChannelView style={{ width: '17%', height: 60, backgroundColor: 'purple' }}>
+              <ProgramRowView style={{ width: '100%', height: 40, backgroundColor: 'orange', flexDirection: 'row' }}>
+                <ChannelView style={{ width: '17%', height: 40, backgroundColor: 'purple' }}>
                   <Text style={{ color: 'white' }}>{item}</Text>
                   <Text style={{ color: 'white' }}>Channel Image goes here</Text>
                 </ChannelView>
@@ -38,7 +38,7 @@ class App extends React.Component {
                   <HorizontalGridView
                     showBlocks={showsData}
                     renderShowBlocks={({ item, index }) => (
-                      <ShowView style={{ width: 135, height: 60, justifyContent: 'center', alignItems: 'center' }} showName={item} />
+                      <ShowView style={{ width: Math.round(Math.random() * (500 - 100 + 1) + 100), height: 40, justifyContent: 'center', alignItems: 'center' }} showName={item} />
                     )}
                   />
                 </View>
