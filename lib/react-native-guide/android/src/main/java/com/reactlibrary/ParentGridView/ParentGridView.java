@@ -26,6 +26,7 @@ import com.facebook.react.views.scroll.OnScrollDispatchHelper;
 import com.facebook.react.views.scroll.ScrollEvent;
 import com.facebook.react.views.scroll.ScrollEventType;
 import com.facebook.react.views.scroll.VelocityHelper;
+import com.reactlibrary.GuideView.CustomEPGContainer;
 import com.reactlibrary.R;
 import com.reactlibrary.GridItem.GridItem;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
@@ -35,9 +36,11 @@ import com.reactlibrary.Utils.VisibleItemsChangeEvent;
  * Created by Godwin Vinny Carole K on Mon, 07 Oct 2019 at 02:52.
  * Copyright (c) Code Prism Technologies Pvt Ltd
  */
-public class ParentGridView extends RecyclerView {
+public class ParentGridView extends RecyclerView implements ChildRecyclerViewScrollListener {
     private final OnScrollDispatchHelper mOnScrollDispatchHelper = new OnScrollDispatchHelper();
     private final VelocityHelper mVelocityHelper = new VelocityHelper();
+
+
 
     static class ScrollOptions {
         @Nullable Float millisecondsPerInch;
@@ -103,7 +106,6 @@ public class ParentGridView extends RecyclerView {
                     final int currentIndex = ((RecyclableWrapperViewGroup) child).getChildIndex();
                     final int centerPoint = (firstIndex + lastIndex) / 2;
                     final int scrollIndex = firstIndex + (currentIndex - prevIndex);
-//                    Log.i("Godwin", "scrollIndex "+ scrollIndex + " center "+ centerPoint + " prevIndex " + prevIndex +" currentIndex "+ currentIndex + " Adjustment " + (currentIndex - (currentIndex - prevIndex)));
                     if(currentIndex >= centerPoint && prevIndex < currentIndex && scrollIndex > 0){
                         parent.smoothScrollToPosition(scrollIndex);
                     }else if(currentIndex <= centerPoint && prevIndex > currentIndex && scrollIndex > 0){
@@ -120,7 +122,7 @@ public class ParentGridView extends RecyclerView {
         };
 //        linearLayoutManager.setOrientation(HORIZONTAL);
         setLayoutManager(linearLayoutManager);
-        setAdapter(new ParentGridAdapter(this));
+        setAdapter(new ParentGridAdapter(this,this));
         setClipToPadding(false);
     }
 
@@ -309,5 +311,10 @@ public class ParentGridView extends RecyclerView {
         } else {
             setItemAnimator(null);
         }
+    }
+
+    @Override
+    public void epgCellIsScrolledBy(int x, int y) {
+        ((CustomEPGContainer)getParent()).childScrolledBy(x,y);
     }
 }

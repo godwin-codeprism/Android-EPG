@@ -1,10 +1,12 @@
 package com.reactlibrary.GuideView;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.reactlibrary.R;
 
@@ -12,10 +14,10 @@ import com.reactlibrary.R;
  * Created by Godwin Vinny Carole K on Sun, 06 Oct 2019 at 20:13.
  * Copyright (c) Code Prism Technologies Pvt Ltd
  */
-public class GuideView extends FrameLayout {
+public class GuideView extends FrameLayout implements focusListener {
     private FrameLayout BaseLayout;
-    private LinearLayout TimeLineContainer;
-    private LinearLayout EPGContainer;
+    private CustomTimeLineContainer TimeLineContainer;
+    private CustomEPGContainer EPGContainer;
 
     public GuideView(Context context) {
         super(context);
@@ -31,11 +33,18 @@ public class GuideView extends FrameLayout {
     public void injectEPGView(View child){
         EPGContainer = BaseLayout.findViewById(R.id.EPGContainer);
         EPGContainer.addView(child);
+        EPGContainer.setFocusListener(this);
+
     }
 
     public void injectTimelineView(View child){
         TimeLineContainer = BaseLayout.findViewById(R.id.TimelineContainer);
         TimeLineContainer.addView(child);
+    }
+
+    @Override
+    public void scrollViewBy(int x, int y) {
+        Log.e("GuideView","Scrolled Called"+x);
     }
 
 }

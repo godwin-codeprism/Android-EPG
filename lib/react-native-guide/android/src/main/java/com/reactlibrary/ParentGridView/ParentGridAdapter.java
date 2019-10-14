@@ -1,5 +1,6 @@
 package com.reactlibrary.ParentGridView;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -19,9 +20,11 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
     private final List<GridItem> mViews = new ArrayList<>();
     private final ParentGridView mScrollView;
     private int mItemCount = 0;
+    private ChildRecyclerViewScrollListener listener;
 
-    public ParentGridAdapter(ParentGridView scrollView) {
+    public ParentGridAdapter(ParentGridView scrollView,ChildRecyclerViewScrollListener listener) {
         mScrollView = scrollView;
+        this.listener = listener;
         //setHasStableIds(true);
     }
 
@@ -60,6 +63,8 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
                 ((ViewGroup) row.getParent()).removeView(row);
             }
             vg.addView(row, 0);
+            Log.e("FATAL:",listener.toString());
+            vg.setListener(listener);
         }
     }
 

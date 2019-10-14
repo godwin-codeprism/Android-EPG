@@ -2,11 +2,17 @@ package com.reactlibrary.Utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.leanback.widget.VerticalGridView;
+
+import com.reactlibrary.ChildGridView.ChildGridView;
+import com.reactlibrary.GridItem.GridItem;
+import com.reactlibrary.ParentGridView.ChildRecyclerViewScrollListener;
+import com.reactlibrary.ProgramRowView.ProgramRowView;
 
 /**
  * Created by Godwin Vinny Carole K on Mon, 07 Oct 2019 at 04:43.
@@ -19,6 +25,12 @@ public class RecyclableWrapperViewGroup extends ViewGroup {
     private int mLastMeasuredWidth;
     private int mLastMeasuredHeight;
     private int childIndex;
+
+    public void setListener(ChildRecyclerViewScrollListener listener) {
+        this.listener = listener;
+    }
+
+    private ChildRecyclerViewScrollListener listener;
 
     public RecyclableWrapperViewGroup(Context context, VerticalGridView.Adapter adapter) {
         super(context);
@@ -52,6 +64,13 @@ public class RecyclableWrapperViewGroup extends ViewGroup {
     public void onViewAdded(View child) {
         super.onViewAdded(child);
         child.addOnLayoutChangeListener(mChildLayoutChangeListener);
+        Log.e("Fatal2:",child.toString());
+        if(child instanceof GridItem){
+            if(listener != null){
+                Log.e("FATAL2:",listener.toString());
+                ((GridItem)child).setChildScrollListener(listener);
+            }
+        }
     }
 
     @Override

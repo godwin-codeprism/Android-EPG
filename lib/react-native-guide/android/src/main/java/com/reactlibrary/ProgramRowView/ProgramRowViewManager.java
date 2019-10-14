@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
+import com.facebook.react.views.view.ReactViewGroup;
+import com.reactlibrary.ChildGridView.ChildGridView;
 
 /**
  * Created by Godwin Vinny Carole K on Wed, 09 Oct 2019 at 21:28.
@@ -25,13 +27,15 @@ public class ProgramRowViewManager extends ViewGroupManager<ProgramRowView> {
         return new ProgramRowView(reactContext);
     }
 
-//    @Override
-//    public void addView(ProgramRowView parent, View child, int index) {
-////        super.addView(parent, child, index);
-//        if(index == 0){
-//            parent.addChannelView(child);
-//        }else if( index == 1){
-//            parent.addChildGridView(child);
-//        }
-//    }
+    @Override
+    public void addView(ProgramRowView parent, View child, int index) {
+        if(index == 1){
+            if(((ReactViewGroup)child).getChildAt(0) instanceof ChildGridView){
+
+                ((ChildGridView) ((ReactViewGroup)child).getChildAt(0)).setChildFocusListener( (parent).getListener());
+
+            }
+        }
+        super.addView(parent, child, index);
+    }
 }

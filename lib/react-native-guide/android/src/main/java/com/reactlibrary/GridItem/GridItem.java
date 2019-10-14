@@ -9,6 +9,8 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
+import com.reactlibrary.ParentGridView.ChildRecyclerViewScrollListener;
+import com.reactlibrary.ProgramRowView.ProgramRowView;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 
 /**
@@ -21,6 +23,12 @@ public class GridItem extends FrameLayout {
     public GridItem(@NonNull Context context) {
         super(context);
     }
+
+    public ChildRecyclerViewScrollListener getListener() {
+        return listener;
+    }
+
+    private ChildRecyclerViewScrollListener listener;
 
     public void setItemIndex(int itemIndex) {
         if (mItemIndexInitialized  && this.mItemIndex != itemIndex){
@@ -39,4 +47,11 @@ public class GridItem extends FrameLayout {
     public int getItemIndex() {
         return mItemIndex;
     }
+
+
+    public void setChildScrollListener(ChildRecyclerViewScrollListener listener) {
+        this.listener = listener;
+    }
+
+
 }

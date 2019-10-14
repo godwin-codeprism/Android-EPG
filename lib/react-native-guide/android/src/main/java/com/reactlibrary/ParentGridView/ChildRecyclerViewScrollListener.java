@@ -5,4 +5,6 @@ package com.reactlibrary.ParentGridView;
  * Copyright (c) Code Prism Technologies Pvt Ltd
  */
 public interface ChildRecyclerViewScrollListener {
+
+    void epgCellIsScrolledBy(int x, int y);
 }

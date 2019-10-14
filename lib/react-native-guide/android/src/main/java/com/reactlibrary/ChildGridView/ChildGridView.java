@@ -25,6 +25,7 @@ import com.facebook.react.views.scroll.OnScrollDispatchHelper;
 import com.facebook.react.views.scroll.ScrollEvent;
 import com.facebook.react.views.scroll.ScrollEventType;
 import com.facebook.react.views.scroll.VelocityHelper;
+import com.reactlibrary.ParentGridView.ChildRecyclerViewScrollListener;
 import com.reactlibrary.R;
 import com.reactlibrary.GridItem.GridItem;
 import com.reactlibrary.Utils.VisibleItemsChangeEvent;
@@ -36,6 +37,11 @@ import com.reactlibrary.Utils.VisibleItemsChangeEvent;
 public class ChildGridView extends RecyclerView {
     private final OnScrollDispatchHelper mOnScrollDispatchHelper = new OnScrollDispatchHelper();
     private final VelocityHelper mVelocityHelper = new VelocityHelper();
+    private ChildRecyclerViewScrollListener listener;
+
+    public void setChildFocusListener(ChildRecyclerViewScrollListener listener) {
+        this.listener = listener;
+    }
 
     public static class ScrollOptions {
         @Nullable
@@ -95,7 +101,15 @@ public class ChildGridView extends RecyclerView {
 //        super(context);
         setHasFixedSize(true);
         ((DefaultItemAnimator)getItemAnimator()).setSupportsChangeAnimations(false);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context){
+            @Override
+            public boolean onRequestChildFocus(@NonNull RecyclerView parent, @NonNull State state, @NonNull View child, @Nullable View focused) {
+                if(listener != null){
+                    listener.epgCellIsScrolledBy(child.getWidth(),0);
+                }
+                return true;
+            }
+        };
         linearLayoutManager.setOrientation(HORIZONTAL);
         setLayoutManager(linearLayoutManager);
         setAdapter(new ChildGridAdapter(this));

@@ -5,4 +5,6 @@ package com.reactlibrary.GuideView;
  * Copyright (c) Code Prism Technologies Pvt Ltd
  */
 public interface focusListener {
+    void scrollViewBy(int x, int y);
+
 }

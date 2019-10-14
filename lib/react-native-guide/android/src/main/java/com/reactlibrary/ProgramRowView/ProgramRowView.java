@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.facebook.react.ReactRootView;
 import com.reactlibrary.ChannelView.ChannelView;
 import com.reactlibrary.ChildGridView.ChildGridView;
+import com.reactlibrary.ParentGridView.ChildRecyclerViewScrollListener;
 import com.reactlibrary.R;
 
 /**
@@ -24,6 +25,13 @@ public class ProgramRowView extends LinearLayout {
     private LinearLayout programRowContainer;
     private LinearLayout channelViewContainer;
     private LinearLayout childGridContainer;
+
+    public ChildRecyclerViewScrollListener getListener() {
+        return listener;
+    }
+
+    private ChildRecyclerViewScrollListener listener;
+
     public ProgramRowView(@NonNull Context context) {
         super(context);
         this.context = context;
@@ -44,5 +52,9 @@ public class ProgramRowView extends LinearLayout {
     public void addChildGridView(View childGridView){
         childGridContainer = programRowContainer.findViewById(R.id.ChildGridContainer);
         childGridContainer.addView(childGridView);
+    }
+
+    public void setChildScrollListener(ChildRecyclerViewScrollListener listener){
+        this.listener = listener;
     }
 }
