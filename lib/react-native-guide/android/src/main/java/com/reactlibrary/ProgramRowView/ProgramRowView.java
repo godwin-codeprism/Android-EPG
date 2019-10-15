@@ -1,6 +1,7 @@
 package com.reactlibrary.ProgramRowView;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,7 @@ public class ProgramRowView extends LinearLayout {
     private LinearLayout programRowContainer;
     private LinearLayout channelViewContainer;
     private LinearLayout childGridContainer;
-
-    public ChildRecyclerViewScrollListener getListener() {
-        return listener;
-    }
-
-    private ChildRecyclerViewScrollListener listener;
+    private ChildRecyclerViewScrollListener childRecyclerViewScrollListener;
 
     public ProgramRowView(@NonNull Context context) {
         super(context);
@@ -55,6 +51,13 @@ public class ProgramRowView extends LinearLayout {
     }
 
     public void setChildScrollListener(ChildRecyclerViewScrollListener listener){
-        this.listener = listener;
+        Log.i("Godwin","set in ProgramRowView -> " + listener);
+        this.childRecyclerViewScrollListener = listener;
     }
+
+    public ChildRecyclerViewScrollListener getChildRecyclerViewScrollListener(){
+        Log.i("Godwin","get in ProgramRowView -> " + this.childRecyclerViewScrollListener);
+        return this.childRecyclerViewScrollListener;
+    }
+
 }

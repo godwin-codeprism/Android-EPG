@@ -28,6 +28,7 @@ import com.facebook.react.views.scroll.VelocityHelper;
 import com.reactlibrary.ParentGridView.ChildRecyclerViewScrollListener;
 import com.reactlibrary.R;
 import com.reactlibrary.GridItem.GridItem;
+import com.reactlibrary.Utils.ScrollListenerHolder;
 import com.reactlibrary.Utils.VisibleItemsChangeEvent;
 
 /**
@@ -37,10 +38,11 @@ import com.reactlibrary.Utils.VisibleItemsChangeEvent;
 public class ChildGridView extends RecyclerView {
     private final OnScrollDispatchHelper mOnScrollDispatchHelper = new OnScrollDispatchHelper();
     private final VelocityHelper mVelocityHelper = new VelocityHelper();
-    private ChildRecyclerViewScrollListener listener;
+    private ChildRecyclerViewScrollListener childRecyclerViewScrollListener;
 
-    public void setChildFocusListener(ChildRecyclerViewScrollListener listener) {
-        this.listener = listener;
+    public void setChildRecyclerViewScrollListener(ChildRecyclerViewScrollListener listener) {
+        Log.i("Godwin","set in ChildGridView -> " + listener);
+        this.childRecyclerViewScrollListener = listener;
     }
 
     public static class ScrollOptions {
@@ -104,8 +106,9 @@ public class ChildGridView extends RecyclerView {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context){
             @Override
             public boolean onRequestChildFocus(@NonNull RecyclerView parent, @NonNull State state, @NonNull View child, @Nullable View focused) {
-                if(listener != null){
-                    listener.epgCellIsScrolledBy(child.getWidth(),0);
+                Log.i("Godwin", "ChildGridView -> " + ScrollListenerHolder.listener);
+                if(ScrollListenerHolder.listener != null){
+                    ScrollListenerHolder.listener.epgCellIsScrolledBy(child.getMeasuredWidth(),0);
                 }
                 return true;
             }

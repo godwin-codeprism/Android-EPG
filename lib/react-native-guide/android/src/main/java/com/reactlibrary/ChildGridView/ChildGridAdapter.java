@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.reactlibrary.GridItem.GridItem;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
+import com.reactlibrary.Utils.RecyclableWrapperViewGroupChild;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,13 +47,13 @@ public class ChildGridAdapter extends RecyclerView.Adapter<ChildGridAdapter.Prog
 
     @Override
     public ProgramGridViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewGroup recyclableWrapperViewGroup = new RecyclableWrapperViewGroup(parent.getContext(), this);
+        ViewGroup recyclableWrapperViewGroup = new RecyclableWrapperViewGroupChild(parent.getContext(), this);
         return new ProgramGridViewHolder(recyclableWrapperViewGroup);
     }
 
     @Override
     public void onBindViewHolder(ProgramGridViewHolder holder, int position) {
-        RecyclableWrapperViewGroup vg = (RecyclableWrapperViewGroup) holder.itemView;
+        RecyclableWrapperViewGroupChild vg = (RecyclableWrapperViewGroupChild) holder.itemView;
         View row = getViewByItemIndex(position);
         if (row != null && row.getParent() != vg) {
             if (row.getParent() != null) {
@@ -65,7 +66,7 @@ public class ChildGridAdapter extends RecyclerView.Adapter<ChildGridAdapter.Prog
     @Override
     public void onViewRecycled(ProgramGridViewHolder holder) {
         super.onViewRecycled(holder);
-        ((RecyclableWrapperViewGroup) holder.itemView).removeAllViews();
+        ((RecyclableWrapperViewGroupChild) holder.itemView).removeAllViews();
     }
 
     @Override

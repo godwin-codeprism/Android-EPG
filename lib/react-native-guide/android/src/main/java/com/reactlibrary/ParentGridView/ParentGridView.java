@@ -122,6 +122,7 @@ public class ParentGridView extends RecyclerView implements ChildRecyclerViewScr
         };
 //        linearLayoutManager.setOrientation(HORIZONTAL);
         setLayoutManager(linearLayoutManager);
+        Log.i("Godwin", "sending to adapter from ParentGridView -> " + this);
         setAdapter(new ParentGridAdapter(this,this));
         setClipToPadding(false);
     }
@@ -315,6 +316,7 @@ public class ParentGridView extends RecyclerView implements ChildRecyclerViewScr
 
     @Override
     public void epgCellIsScrolledBy(int x, int y) {
+        Log.e("Godwin","Values are "+x);
         ((CustomEPGContainer)getParent()).childScrolledBy(x,y);
     }
 }

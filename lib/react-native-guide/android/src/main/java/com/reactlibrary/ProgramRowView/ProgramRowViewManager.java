@@ -1,5 +1,6 @@
 package com.reactlibrary.ProgramRowView;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -29,12 +30,9 @@ public class ProgramRowViewManager extends ViewGroupManager<ProgramRowView> {
 
     @Override
     public void addView(ProgramRowView parent, View child, int index) {
-        if(index == 1){
-            if(((ReactViewGroup)child).getChildAt(0) instanceof ChildGridView){
-
-                ((ChildGridView) ((ReactViewGroup)child).getChildAt(0)).setChildFocusListener( (parent).getListener());
-
-            }
+        if(child instanceof ChildGridView){
+            Log.i("Godwin","set in ProgramRowViewManager -> " + parent.getChildRecyclerViewScrollListener());
+            ((ChildGridView) child).setChildRecyclerViewScrollListener(parent.getChildRecyclerViewScrollListener());
         }
         super.addView(parent, child, index);
     }

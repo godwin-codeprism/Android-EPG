@@ -1,6 +1,7 @@
 package com.reactlibrary.GuideView;
 
 import android.content.Context;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,9 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.reactlibrary.ChildGridView.ChildGridView;
 import com.reactlibrary.R;
 
 /**
@@ -18,6 +22,7 @@ public class GuideView extends FrameLayout implements focusListener {
     private FrameLayout BaseLayout;
     private CustomTimeLineContainer TimeLineContainer;
     private CustomEPGContainer EPGContainer;
+
 
     public GuideView(Context context) {
         super(context);
@@ -40,11 +45,15 @@ public class GuideView extends FrameLayout implements focusListener {
     public void injectTimelineView(View child){
         TimeLineContainer = BaseLayout.findViewById(R.id.TimelineContainer);
         TimeLineContainer.addView(child);
+
     }
 
     @Override
     public void scrollViewBy(int x, int y) {
-        Log.e("GuideView","Scrolled Called"+x);
+        if(TimeLineContainer.getChildAt(0) instanceof ChildGridView){
+            ((ChildGridView)TimeLineContainer.getChildAt(0)).smoothScrollBy(x,y);
+        }
+
     }
 
 }

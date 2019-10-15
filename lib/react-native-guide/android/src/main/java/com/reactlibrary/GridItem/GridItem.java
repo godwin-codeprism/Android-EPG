@@ -20,15 +20,12 @@ import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 public class GridItem extends FrameLayout {
     private int mItemIndex;
     private boolean mItemIndexInitialized;
-    public GridItem(@NonNull Context context) {
+    private ChildRecyclerViewScrollListener childRecyclerViewScrollListener;
+
+    public GridItem(@NonNull Context context,ChildRecyclerViewScrollListener listener) {
         super(context);
+        this.childRecyclerViewScrollListener = listener;
     }
-
-    public ChildRecyclerViewScrollListener getListener() {
-        return listener;
-    }
-
-    private ChildRecyclerViewScrollListener listener;
 
     public void setItemIndex(int itemIndex) {
         if (mItemIndexInitialized  && this.mItemIndex != itemIndex){
@@ -49,8 +46,14 @@ public class GridItem extends FrameLayout {
     }
 
 
-    public void setChildScrollListener(ChildRecyclerViewScrollListener listener) {
-        this.listener = listener;
+    public void setChildRecyclerViewScrollListener(ChildRecyclerViewScrollListener listener) {
+        Log.i("Godwin","set in GridItem -> " + listener);
+        this.childRecyclerViewScrollListener = listener;
+    }
+
+    public ChildRecyclerViewScrollListener getChildRecyclerViewScrollListener(){
+        Log.i("Godwin","get in GridItem -> " + this.childRecyclerViewScrollListener);
+        return this.childRecyclerViewScrollListener;
     }
 
 

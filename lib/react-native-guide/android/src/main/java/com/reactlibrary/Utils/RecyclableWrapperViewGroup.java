@@ -12,6 +12,7 @@ import androidx.leanback.widget.VerticalGridView;
 import com.reactlibrary.ChildGridView.ChildGridView;
 import com.reactlibrary.GridItem.GridItem;
 import com.reactlibrary.ParentGridView.ChildRecyclerViewScrollListener;
+import com.reactlibrary.ParentGridView.ParentGridAdapter;
 import com.reactlibrary.ProgramRowView.ProgramRowView;
 
 /**
@@ -25,18 +26,16 @@ public class RecyclableWrapperViewGroup extends ViewGroup {
     private int mLastMeasuredWidth;
     private int mLastMeasuredHeight;
     private int childIndex;
+    private ChildRecyclerViewScrollListener childRecyclerViewScrollListener;
 
-    public void setListener(ChildRecyclerViewScrollListener listener) {
-        this.listener = listener;
-    }
 
-    private ChildRecyclerViewScrollListener listener;
-
-    public RecyclableWrapperViewGroup(Context context, VerticalGridView.Adapter adapter) {
+    public RecyclableWrapperViewGroup(Context context, VerticalGridView.Adapter adapter, ChildRecyclerViewScrollListener listener) {
         super(context);
         mAdapter = adapter;
         mLastMeasuredHeight = 10;
         mLastMeasuredWidth = 10;
+        Log.i("Godwin", "constructor in RecyclableWrapperViewGroup -> " + listener);
+        this.childRecyclerViewScrollListener = listener;
     }
 
     private OnLayoutChangeListener mChildLayoutChangeListener = new OnLayoutChangeListener() {
@@ -62,15 +61,12 @@ public class RecyclableWrapperViewGroup extends ViewGroup {
 
     @Override
     public void onViewAdded(View child) {
+        if(child instanceof GridItem){
+            Log.i("Godwin","set in RecyclableWrapperViewGroup -> " + this.childRecyclerViewScrollListener);
+            ((GridItem) child).setChildRecyclerViewScrollListener(this.childRecyclerViewScrollListener);
+        }
         super.onViewAdded(child);
         child.addOnLayoutChangeListener(mChildLayoutChangeListener);
-        Log.e("Fatal2:",child.toString());
-        if(child instanceof GridItem){
-            if(listener != null){
-                Log.e("FATAL2:",listener.toString());
-                ((GridItem)child).setChildScrollListener(listener);
-            }
-        }
     }
 
     @Override
