@@ -1,20 +1,11 @@
 package com.reactlibrary.ProgramRowView;
 
 import android.content.Context;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.facebook.react.ReactRootView;
-import com.reactlibrary.ChannelView.ChannelView;
-import com.reactlibrary.ChildGridView.ChildGridView;
-import com.reactlibrary.ParentGridView.ChildRecyclerViewScrollListener;
 import com.reactlibrary.R;
 
 /**
@@ -26,7 +17,6 @@ public class ProgramRowView extends LinearLayout {
     private LinearLayout programRowContainer;
     private LinearLayout channelViewContainer;
     private LinearLayout childGridContainer;
-    private ChildRecyclerViewScrollListener childRecyclerViewScrollListener;
 
     public ProgramRowView(@NonNull Context context) {
         super(context);
@@ -48,16 +38,6 @@ public class ProgramRowView extends LinearLayout {
     public void addChildGridView(View childGridView){
         childGridContainer = programRowContainer.findViewById(R.id.ChildGridContainer);
         childGridContainer.addView(childGridView);
-    }
-
-    public void setChildScrollListener(ChildRecyclerViewScrollListener listener){
-        Log.i("Godwin","set in ProgramRowView -> " + listener);
-        this.childRecyclerViewScrollListener = listener;
-    }
-
-    public ChildRecyclerViewScrollListener getChildRecyclerViewScrollListener(){
-        Log.i("Godwin","get in ProgramRowView -> " + this.childRecyclerViewScrollListener);
-        return this.childRecyclerViewScrollListener;
     }
 
 }

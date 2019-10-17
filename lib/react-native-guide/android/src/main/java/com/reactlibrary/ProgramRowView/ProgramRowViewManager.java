@@ -30,10 +30,6 @@ public class ProgramRowViewManager extends ViewGroupManager<ProgramRowView> {
 
     @Override
     public void addView(ProgramRowView parent, View child, int index) {
-        if(child instanceof ChildGridView){
-            Log.i("Godwin","set in ProgramRowViewManager -> " + parent.getChildRecyclerViewScrollListener());
-            ((ChildGridView) child).setChildRecyclerViewScrollListener(parent.getChildRecyclerViewScrollListener());
-        }
         super.addView(parent, child, index);
     }
 }

@@ -2,9 +2,7 @@ package com.reactlibrary.ParentGridView;
 
 import android.content.Context;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,7 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.react.bridge.ReactContext;
@@ -29,6 +26,7 @@ import com.facebook.react.views.scroll.VelocityHelper;
 import com.reactlibrary.GuideView.CustomEPGContainer;
 import com.reactlibrary.R;
 import com.reactlibrary.GridItem.GridItem;
+import com.reactlibrary.Utils.GlobalScrollListenerInterface;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 import com.reactlibrary.Utils.VisibleItemsChangeEvent;
 
@@ -36,7 +34,7 @@ import com.reactlibrary.Utils.VisibleItemsChangeEvent;
  * Created by Godwin Vinny Carole K on Mon, 07 Oct 2019 at 02:52.
  * Copyright (c) Code Prism Technologies Pvt Ltd
  */
-public class ParentGridView extends RecyclerView implements ChildRecyclerViewScrollListener {
+public class ParentGridView extends RecyclerView implements GlobalScrollListenerInterface {
     private final OnScrollDispatchHelper mOnScrollDispatchHelper = new OnScrollDispatchHelper();
     private final VelocityHelper mVelocityHelper = new VelocityHelper();
 
@@ -122,7 +120,6 @@ public class ParentGridView extends RecyclerView implements ChildRecyclerViewScr
         };
 //        linearLayoutManager.setOrientation(HORIZONTAL);
         setLayoutManager(linearLayoutManager);
-        Log.i("Godwin", "sending to adapter from ParentGridView -> " + this);
         setAdapter(new ParentGridAdapter(this,this));
         setClipToPadding(false);
     }
@@ -316,7 +313,6 @@ public class ParentGridView extends RecyclerView implements ChildRecyclerViewScr
 
     @Override
     public void epgCellIsScrolledBy(int x, int y) {
-        Log.e("Godwin","Values are "+x);
         ((CustomEPGContainer)getParent()).childScrolledBy(x,y);
     }
 }

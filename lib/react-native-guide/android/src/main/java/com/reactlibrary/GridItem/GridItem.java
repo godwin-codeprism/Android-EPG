@@ -1,16 +1,11 @@
 package com.reactlibrary.GridItem;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import com.reactlibrary.ParentGridView.ChildRecyclerViewScrollListener;
-import com.reactlibrary.ProgramRowView.ProgramRowView;
+import com.reactlibrary.Utils.GlobalScrollListenerInterface;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 
 /**
@@ -20,11 +15,10 @@ import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 public class GridItem extends FrameLayout {
     private int mItemIndex;
     private boolean mItemIndexInitialized;
-    private ChildRecyclerViewScrollListener childRecyclerViewScrollListener;
+    private GlobalScrollListenerInterface childRecyclerViewScrollListener;
 
-    public GridItem(@NonNull Context context,ChildRecyclerViewScrollListener listener) {
+    public GridItem(@NonNull Context context) {
         super(context);
-        this.childRecyclerViewScrollListener = listener;
     }
 
     public void setItemIndex(int itemIndex) {
@@ -46,14 +40,8 @@ public class GridItem extends FrameLayout {
     }
 
 
-    public void setChildRecyclerViewScrollListener(ChildRecyclerViewScrollListener listener) {
-        Log.i("Godwin","set in GridItem -> " + listener);
+    public void setChildRecyclerViewScrollListener(GlobalScrollListenerInterface listener) {
         this.childRecyclerViewScrollListener = listener;
-    }
-
-    public ChildRecyclerViewScrollListener getChildRecyclerViewScrollListener(){
-        Log.i("Godwin","get in GridItem -> " + this.childRecyclerViewScrollListener);
-        return this.childRecyclerViewScrollListener;
     }
 
 

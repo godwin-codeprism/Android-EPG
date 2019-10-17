@@ -1,15 +1,14 @@
 package com.reactlibrary.ParentGridView;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.reactlibrary.GridItem.GridItem;
-import com.reactlibrary.GridItem.GridItemManager;
+import com.reactlibrary.Utils.GlobalScrollListenerInterface;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
-import com.reactlibrary.Utils.ScrollListenerHolder;
+import com.reactlibrary.Utils.GlobalScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +21,9 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
     private final List<GridItem> mViews = new ArrayList<>();
     private final ParentGridView mScrollView;
     private int mItemCount = 0;
-    private ChildRecyclerViewScrollListener childRecyclerViewScrollListener;
+    private GlobalScrollListenerInterface childRecyclerViewScrollListener;
 
-    public ParentGridAdapter(ParentGridView scrollView, ChildRecyclerViewScrollListener listener) {
+    public ParentGridAdapter(ParentGridView scrollView, GlobalScrollListenerInterface listener) {
         mScrollView = scrollView;
         this.childRecyclerViewScrollListener = listener;
         //setHasStableIds(true);
@@ -51,8 +50,7 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
 
     @Override
     public ParentGridViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewGroup recyclableWrapperViewGroup = new RecyclableWrapperViewGroup(parent.getContext(), this, this.childRecyclerViewScrollListener);
-        Log.i("Godwin", "sending in onCreateViewHolder ParentGridViewAdapter -> " + this.childRecyclerViewScrollListener);
+        ViewGroup recyclableWrapperViewGroup = new RecyclableWrapperViewGroup(parent.getContext(), this);
         return new ParentGridViewHolder(recyclableWrapperViewGroup, this.childRecyclerViewScrollListener);
     }
 
@@ -66,7 +64,7 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
                 ((ViewGroup) row.getParent()).removeView(row);
             }
             row.setChildRecyclerViewScrollListener(holder.getChildRecyclerViewScrollListener());
-            ScrollListenerHolder.listener = holder.childRecyclerViewScrollListener;
+            GlobalScrollListener.listener = holder.childRecyclerViewScrollListener;
             vg.addView(row, 0);
         }
     }
@@ -101,14 +99,13 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
     }
 
     public static class ParentGridViewHolder extends RecyclerView.ViewHolder {
-        private ChildRecyclerViewScrollListener childRecyclerViewScrollListener;
-        public ParentGridViewHolder(View itemView, ChildRecyclerViewScrollListener listener) {
+        private GlobalScrollListenerInterface childRecyclerViewScrollListener;
+        public ParentGridViewHolder(View itemView, GlobalScrollListenerInterface listener) {
             super(itemView);
-            Log.i("Godwin", "setting in ParentGridViewHolder -> " + listener);
             this.childRecyclerViewScrollListener = listener;
         }
 
-        public ChildRecyclerViewScrollListener getChildRecyclerViewScrollListener () {
+        public GlobalScrollListenerInterface getChildRecyclerViewScrollListener () {
             return this.childRecyclerViewScrollListener;
         }
     }
