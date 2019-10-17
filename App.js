@@ -38,7 +38,8 @@ class App extends React.Component {
                   <HorizontalGridView
                     showBlocks={showsData}
                     renderShowBlocks={({ item, index }) => (
-                      <ShowView style={{ width: Math.round(Math.random() * (500 - 100 + 1) + 100), height: 40, justifyContent: 'center', alignItems: 'center' }} showName={item} />
+                      // <ShowView style={{ width: Math.round(Math.random() * (500 - 100 + 1) + 100), height: 40, justifyContent: 'center', alignItems: 'center' }} showName={item} />
+                      <ShowView style={{ width: 135, height: 40, justifyContent: 'center', alignItems: 'center' }} showName={item} />
                     )}
                   />
                 </View>

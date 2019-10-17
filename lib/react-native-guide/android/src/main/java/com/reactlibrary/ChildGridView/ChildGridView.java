@@ -25,7 +25,8 @@ import com.facebook.react.views.scroll.ScrollEventType;
 import com.facebook.react.views.scroll.VelocityHelper;
 import com.reactlibrary.R;
 import com.reactlibrary.GridItem.GridItem;
-import com.reactlibrary.Utils.GlobalScrollListener;
+import com.reactlibrary.Utils.GlobalScrollController;
+import com.reactlibrary.Utils.RecyclableWrapperViewGroupChild;
 import com.reactlibrary.Utils.VisibleItemsChangeEvent;
 
 /**
@@ -97,8 +98,15 @@ public class ChildGridView extends RecyclerView {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context){
             @Override
             public boolean onRequestChildFocus(@NonNull RecyclerView parent, @NonNull State state, @NonNull View child, @Nullable View focused) {
-                if(GlobalScrollListener.listener != null){
-                    GlobalScrollListener.listener.epgCellIsScrolledBy(child.getMeasuredWidth(),0);
+                if(GlobalScrollController.listener != null){
+                        if(child instanceof RecyclableWrapperViewGroupChild && getFocusedChild() != null){
+                            final int currentIndex = ((RecyclableWrapperViewGroupChild) child).getChildIndex();
+                            if(findLastVisibleItemPosition() == currentIndex){
+                                GlobalScrollController.listener.syncScrollBy(child.getMeasuredWidth(),0);
+                            }else if(findFirstVisibleItemPosition() == currentIndex){
+                                GlobalScrollController.listener.syncScrollBy(-child.getMeasuredWidth(),0);
+                            }
+                        }
                 }
                 return true;
             }

@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.reactlibrary.GridItem.GridItem;
-import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroupChild;
 
 import java.util.ArrayList;
@@ -54,7 +53,8 @@ public class ChildGridAdapter extends RecyclerView.Adapter<ChildGridAdapter.Prog
     @Override
     public void onBindViewHolder(ProgramGridViewHolder holder, int position) {
         RecyclableWrapperViewGroupChild vg = (RecyclableWrapperViewGroupChild) holder.itemView;
-        View row = getViewByItemIndex(position);
+        GridItem row = getViewByItemIndex(position);
+        vg.setChildIndex(position);
         if (row != null && row.getParent() != vg) {
             if (row.getParent() != null) {
                 ((ViewGroup) row.getParent()).removeView(row);

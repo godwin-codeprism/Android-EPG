@@ -1,14 +1,18 @@
 package com.reactlibrary.ParentGridView;
 
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.react.views.view.ReactViewGroup;
+import com.reactlibrary.ChildGridView.ChildGridView;
 import com.reactlibrary.GridItem.GridItem;
-import com.reactlibrary.Utils.GlobalScrollListenerInterface;
+import com.reactlibrary.ProgramRowView.ProgramRowView;
+import com.reactlibrary.Utils.GlobalScrollControllerInterface;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
-import com.reactlibrary.Utils.GlobalScrollListener;
+import com.reactlibrary.Utils.GlobalScrollController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +25,11 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
     private final List<GridItem> mViews = new ArrayList<>();
     private final ParentGridView mScrollView;
     private int mItemCount = 0;
-    private GlobalScrollListenerInterface childRecyclerViewScrollListener;
+    private GlobalScrollControllerInterface childRecyclerViewScrollListener;
 
-    public ParentGridAdapter(ParentGridView scrollView, GlobalScrollListenerInterface listener) {
+    public ParentGridAdapter(ParentGridView scrollView, GlobalScrollControllerInterface listener) {
         mScrollView = scrollView;
-        this.childRecyclerViewScrollListener = listener;
+        GlobalScrollController.listener = listener;
         //setHasStableIds(true);
     }
 
@@ -51,7 +55,7 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
     @Override
     public ParentGridViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ViewGroup recyclableWrapperViewGroup = new RecyclableWrapperViewGroup(parent.getContext(), this);
-        return new ParentGridViewHolder(recyclableWrapperViewGroup, this.childRecyclerViewScrollListener);
+        return new ParentGridViewHolder(recyclableWrapperViewGroup);
     }
 
     @Override
@@ -63,9 +67,10 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
             if (row.getParent() != null) {
                 ((ViewGroup) row.getParent()).removeView(row);
             }
-            row.setChildRecyclerViewScrollListener(holder.getChildRecyclerViewScrollListener());
-            GlobalScrollListener.listener = holder.childRecyclerViewScrollListener;
             vg.addView(row, 0);
+            ProgramRowView rowView = (ProgramRowView)  row.getChildAt(0);
+            ChildGridView childGridView = (ChildGridView) ((ReactViewGroup) rowView.getChildAt(1)).getChildAt(0);
+            childGridView.scrollBy(GlobalScrollController.globalDx, GlobalScrollController.globalDy);
         }
     }
 
@@ -99,14 +104,8 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
     }
 
     public static class ParentGridViewHolder extends RecyclerView.ViewHolder {
-        private GlobalScrollListenerInterface childRecyclerViewScrollListener;
-        public ParentGridViewHolder(View itemView, GlobalScrollListenerInterface listener) {
+        public ParentGridViewHolder(View itemView) {
             super(itemView);
-            this.childRecyclerViewScrollListener = listener;
-        }
-
-        public GlobalScrollListenerInterface getChildRecyclerViewScrollListener () {
-            return this.childRecyclerViewScrollListener;
         }
     }
 }

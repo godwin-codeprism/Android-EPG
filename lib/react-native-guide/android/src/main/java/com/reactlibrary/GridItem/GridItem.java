@@ -5,7 +5,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 
-import com.reactlibrary.Utils.GlobalScrollListenerInterface;
+import com.reactlibrary.Utils.GlobalScrollControllerInterface;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 
 /**
@@ -15,7 +15,6 @@ import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 public class GridItem extends FrameLayout {
     private int mItemIndex;
     private boolean mItemIndexInitialized;
-    private GlobalScrollListenerInterface childRecyclerViewScrollListener;
 
     public GridItem(@NonNull Context context) {
         super(context);
@@ -37,11 +36,6 @@ public class GridItem extends FrameLayout {
 
     public int getItemIndex() {
         return mItemIndex;
-    }
-
-
-    public void setChildRecyclerViewScrollListener(GlobalScrollListenerInterface listener) {
-        this.childRecyclerViewScrollListener = listener;
     }
 
 
