@@ -3,7 +3,9 @@ package com.reactlibrary.ChildGridView;
 import android.content.Context;
 import android.graphics.PointF;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -26,6 +28,7 @@ import com.facebook.react.views.scroll.VelocityHelper;
 import com.reactlibrary.R;
 import com.reactlibrary.GridItem.GridItem;
 import com.reactlibrary.Utils.GlobalScrollController;
+import com.reactlibrary.Utils.OnRepeatedKeyInterceptListener;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroupChild;
 import com.reactlibrary.Utils.VisibleItemsChangeEvent;
 
@@ -33,9 +36,10 @@ import com.reactlibrary.Utils.VisibleItemsChangeEvent;
  * Created by Godwin Vinny Carole K on Wed, 09 Oct 2019 at 20:42.
  * Copyright (c) Code Prism Technologies Pvt Ltd
  */
-public class ChildGridView extends RecyclerView {
+public class ChildGridView extends RecyclerView{
     private final OnScrollDispatchHelper mOnScrollDispatchHelper = new OnScrollDispatchHelper();
     private final VelocityHelper mVelocityHelper = new VelocityHelper();
+    private final OnRepeatedKeyInterceptListener mOnRepeatedKeyInterceptListener;
 
     public static class ScrollOptions {
         @Nullable
@@ -92,6 +96,7 @@ public class ChildGridView extends RecyclerView {
 
     public ChildGridView(Context context) {
         super(new ContextThemeWrapper(context, R.style.ScrollbarRecyclerView));
+        mOnRepeatedKeyInterceptListener = new OnRepeatedKeyInterceptListener(this);
 //        super(context);
         setHasFixedSize(true);
         ((DefaultItemAnimator)getItemAnimator()).setSupportsChangeAnimations(false);
@@ -101,20 +106,24 @@ public class ChildGridView extends RecyclerView {
                 if(GlobalScrollController.listener != null){
                         if(child instanceof RecyclableWrapperViewGroupChild && getFocusedChild() != null){
                             final int currentIndex = ((RecyclableWrapperViewGroupChild) child).getChildIndex();
-                            if(findLastVisibleItemPosition() == currentIndex){
+                            if(findLastVisibleItemPosition() == currentIndex - 1){
                                 GlobalScrollController.listener.syncScrollBy(child.getMeasuredWidth(),0);
-                            }else if(findFirstVisibleItemPosition() == currentIndex){
+                            }else if(findFirstVisibleItemPosition() == currentIndex - 1){
                                 GlobalScrollController.listener.syncScrollBy(-child.getMeasuredWidth(),0);
                             }
                         }
                 }
+//                super.onRequestChildFocus(parent,state,child,focused);
                 return true;
             }
+
         };
         linearLayoutManager.setOrientation(HORIZONTAL);
         setLayoutManager(linearLayoutManager);
         setAdapter(new ChildGridAdapter(this));
     }
+
+
 
     /*package*/
     public void addViewToAdapter(GridItem child, int index) {

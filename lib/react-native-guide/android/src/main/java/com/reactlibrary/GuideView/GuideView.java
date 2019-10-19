@@ -2,6 +2,7 @@ package com.reactlibrary.GuideView;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -57,7 +58,7 @@ public class GuideView extends FrameLayout implements focusListener {
     public void scrollViewBy(int x, int y) {
 //        Log.i("Godwin", "scrollSyncCalled Called");
         if(TimeLineContainer.getChildAt(0) instanceof ChildGridView){
-            ((ChildGridView)TimeLineContainer.getChildAt(0)).smoothScrollBy(x,y);
+            TimeLineContainer.getChildAt(0).scrollBy(x,y);
         }
         if(EPGContainer.getChildAt(0) instanceof ParentGridView){
             ParentGridView parentGridView = (ParentGridView) EPGContainer.getChildAt(0);
@@ -70,7 +71,7 @@ public class GuideView extends FrameLayout implements focusListener {
                     if(recyclableWrapperViewGroup != null && recyclableWrapperViewGroup.getChildCount() != 0 ){
                         ProgramRowView rowView = (ProgramRowView) ((GridItem)(recyclableWrapperViewGroup).getChildAt(0)).getChildAt(0);
                         ChildGridView childGridView = (ChildGridView) ((ReactViewGroup) rowView.getChildAt(1)).getChildAt(0);
-                        childGridView.smoothScrollBy(x,y);
+                        childGridView.scrollBy(x,y);
                     }
                 }
             }

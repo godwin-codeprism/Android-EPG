@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -29,6 +30,7 @@ import com.reactlibrary.R;
 import com.reactlibrary.GridItem.GridItem;
 import com.reactlibrary.Utils.GlobalScrollController;
 import com.reactlibrary.Utils.GlobalScrollControllerInterface;
+import com.reactlibrary.Utils.OnRepeatedKeyInterceptListener;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 import com.reactlibrary.Utils.VisibleItemsChangeEvent;
 
@@ -54,7 +56,6 @@ public class ParentGridView extends RecyclerView implements GlobalScrollControll
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-
         if (mOnScrollDispatchHelper.onScrollChanged(l, t)) {
             getReactContext().getNativeModule(UIManagerModule.class).getEventDispatcher()
                     .dispatchEvent(ScrollEvent.obtain(
