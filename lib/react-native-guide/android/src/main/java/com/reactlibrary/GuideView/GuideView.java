@@ -72,6 +72,7 @@ public class GuideView extends FrameLayout implements focusListener {
                         ProgramRowView rowView = (ProgramRowView) ((GridItem)(recyclableWrapperViewGroup).getChildAt(0)).getChildAt(0);
                         ChildGridView childGridView = (ChildGridView) ((ReactViewGroup) rowView.getChildAt(1)).getChildAt(0);
                         childGridView.scrollBy(x,y);
+                        childGridView.setScrollOffset(GlobalScrollController.globalDx);
                     }
                 }
             }

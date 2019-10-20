@@ -316,8 +316,8 @@ public class ParentGridView extends RecyclerView implements GlobalScrollControll
 
     @Override
     public void syncScrollBy(int x, int y) {
-        ((CustomEPGContainer)getParent()).childScrolledBy(x,y);
         GlobalScrollController.globalDx += x;
         GlobalScrollController.globalDy += y;
+        ((CustomEPGContainer)getParent()).childScrolledBy(x,y);
     }
 }

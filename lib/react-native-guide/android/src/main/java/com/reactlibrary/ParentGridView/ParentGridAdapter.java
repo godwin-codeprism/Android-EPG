@@ -1,7 +1,6 @@
 package com.reactlibrary.ParentGridView;
 
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -22,7 +21,7 @@ import java.util.List;
  * Created by Godwin Vinny Carole K on Mon, 07 Oct 2019 at 03:26.
  * Copyright (c) Code Prism Technologies Pvt Ltd
  */
-public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.ParentGridViewHolder>{
+public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.ParentGridViewHolder> {
     private final List<GridItem> mViews = new ArrayList<>();
     private final ParentGridView mScrollView;
     private int mItemCount = 0;
@@ -69,9 +68,13 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
                 ((ViewGroup) row.getParent()).removeView(row);
             }
             vg.addView(row, 0);
-            ProgramRowView rowView = (ProgramRowView)  row.getChildAt(0);
+            ProgramRowView rowView = (ProgramRowView) row.getChildAt(0);
             ChildGridView childGridView = (ChildGridView) ((ReactViewGroup) rowView.getChildAt(1)).getChildAt(0);
-            childGridView.scrollTo(600, 500);
+            if (!GlobalScrollController.globalDx.equals(childGridView.getScrollOffset())) {
+                Log.i("Godwin", "globalDx"+ GlobalScrollController.globalDx + " ChildDx " + childGridView.getScrollOffset() );
+                childGridView.scrollBy(GlobalScrollController.globalDx - childGridView.getScrollOffset(), GlobalScrollController.globalDy);
+                childGridView.setScrollOffset(GlobalScrollController.globalDx);
+            }
         }
     }
 

@@ -40,6 +40,15 @@ public class ChildGridView extends RecyclerView{
     private final OnScrollDispatchHelper mOnScrollDispatchHelper = new OnScrollDispatchHelper();
     private final VelocityHelper mVelocityHelper = new VelocityHelper();
     private final OnRepeatedKeyInterceptListener mOnRepeatedKeyInterceptListener;
+    private Integer scrollOffset = 0;
+
+    public Integer getScrollOffset() {
+        return scrollOffset;
+    }
+
+    public void setScrollOffset(Integer scrollOffset) {
+        this.scrollOffset = scrollOffset;
+    }
 
     public static class ScrollOptions {
         @Nullable
@@ -108,7 +117,7 @@ public class ChildGridView extends RecyclerView{
                             final int currentIndex = ((RecyclableWrapperViewGroupChild) child).getChildIndex();
                             if(findLastVisibleItemPosition() == currentIndex - 1){
                                 GlobalScrollController.listener.syncScrollBy(child.getMeasuredWidth(),0);
-                            }else if(findFirstVisibleItemPosition() == currentIndex - 1){
+                            }else if(findFirstVisibleItemPosition() == currentIndex + 1){
                                 GlobalScrollController.listener.syncScrollBy(-child.getMeasuredWidth(),0);
                             }
                         }
