@@ -25,13 +25,17 @@ import com.facebook.react.views.scroll.OnScrollDispatchHelper;
 import com.facebook.react.views.scroll.ScrollEvent;
 import com.facebook.react.views.scroll.ScrollEventType;
 import com.facebook.react.views.scroll.VelocityHelper;
+import com.facebook.react.views.view.ReactViewGroup;
+import com.reactlibrary.ChildGridView.ChildGridView;
 import com.reactlibrary.GuideView.CustomEPGContainer;
+import com.reactlibrary.ProgramRowView.ProgramRowView;
 import com.reactlibrary.R;
 import com.reactlibrary.GridItem.GridItem;
 import com.reactlibrary.Utils.GlobalScrollController;
 import com.reactlibrary.Utils.GlobalScrollControllerInterface;
 import com.reactlibrary.Utils.OnRepeatedKeyInterceptListener;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
+import com.reactlibrary.Utils.VerticalItemDecorator;
 import com.reactlibrary.Utils.VisibleItemsChangeEvent;
 
 /**
@@ -96,6 +100,7 @@ public class ParentGridView extends RecyclerView implements GlobalScrollControll
         super(new ContextThemeWrapper(context, R.style.ScrollbarRecyclerView));
 //        super(context);
         setHasFixedSize(true);
+        setFocusable(false);
         ((DefaultItemAnimator)getItemAnimator()).setSupportsChangeAnimations(false);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context){
             @Override
@@ -122,6 +127,7 @@ public class ParentGridView extends RecyclerView implements GlobalScrollControll
             }
         };
 //        linearLayoutManager.setOrientation(HORIZONTAL);
+        setItemViewCacheSize(0);
         setLayoutManager(linearLayoutManager);
         setAdapter(new ParentGridAdapter(this,this));
         setClipToPadding(false);
@@ -313,6 +319,19 @@ public class ParentGridView extends RecyclerView implements GlobalScrollControll
             setItemAnimator(null);
         }
     }
+
+    @Override
+    public void onChildAttachedToWindow(@NonNull View child) {
+        super.onChildAttachedToWindow(child);
+        GridItem gridItem = (GridItem) ((RecyclableWrapperViewGroup)child).getChildAt(0);
+        ProgramRowView rowView = (ProgramRowView) gridItem.getChildAt(0);
+        ChildGridView childGridView = (ChildGridView) ((ReactViewGroup) rowView.getChildAt(1)).getChildAt(0);
+        if (!GlobalScrollController.globalDx.equals(childGridView.getScrollOffset())) {
+            childGridView.scrollBy(GlobalScrollController.globalDx - childGridView.getScrollOffset(), GlobalScrollController.globalDy);
+            childGridView.setScrollOffset(GlobalScrollController.globalDx);
+        }
+    }
+
 
     @Override
     public void syncScrollBy(int x, int y) {

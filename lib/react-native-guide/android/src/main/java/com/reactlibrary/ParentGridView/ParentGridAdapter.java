@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.react.views.view.ReactViewGroup;
@@ -58,6 +59,8 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
         return new ParentGridViewHolder(recyclableWrapperViewGroup);
     }
 
+
+
     @Override
     public void onBindViewHolder(ParentGridViewHolder holder, int position) {
         RecyclableWrapperViewGroup vg = (RecyclableWrapperViewGroup) holder.itemView;
@@ -68,14 +71,14 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
                 ((ViewGroup) row.getParent()).removeView(row);
             }
             vg.addView(row, 0);
-            ProgramRowView rowView = (ProgramRowView) row.getChildAt(0);
-            ChildGridView childGridView = (ChildGridView) ((ReactViewGroup) rowView.getChildAt(1)).getChildAt(0);
-            if (!GlobalScrollController.globalDx.equals(childGridView.getScrollOffset())) {
-                Log.i("Godwin", "globalDx"+ GlobalScrollController.globalDx + " ChildDx " + childGridView.getScrollOffset() );
-                childGridView.scrollBy(GlobalScrollController.globalDx - childGridView.getScrollOffset(), GlobalScrollController.globalDy);
-                childGridView.setScrollOffset(GlobalScrollController.globalDx);
-            }
         }
+//            ProgramRowView rowView = (ProgramRowView) row.getChildAt(0);
+//            ChildGridView childGridView = (ChildGridView) ((ReactViewGroup) rowView.getChildAt(1)).getChildAt(0);
+//            if (!GlobalScrollController.globalDx.equals(childGridView.getScrollOffset())) {
+//                childGridView.scrollBy(GlobalScrollController.globalDx - childGridView.getScrollOffset(), GlobalScrollController.globalDy);
+//                childGridView.setScrollOffset(GlobalScrollController.globalDx);
+//            }
+//        }
     }
 
     @Override

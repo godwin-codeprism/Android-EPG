@@ -5,7 +5,6 @@ import android.graphics.PointF;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -27,9 +26,12 @@ import com.facebook.react.views.scroll.ScrollEventType;
 import com.facebook.react.views.scroll.VelocityHelper;
 import com.reactlibrary.R;
 import com.reactlibrary.GridItem.GridItem;
+import com.reactlibrary.ShowView.ShowView;
 import com.reactlibrary.Utils.GlobalScrollController;
+import com.reactlibrary.Utils.HorizontalItemDecorator;
 import com.reactlibrary.Utils.OnRepeatedKeyInterceptListener;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroupChild;
+import com.reactlibrary.Utils.VerticalItemDecorator;
 import com.reactlibrary.Utils.VisibleItemsChangeEvent;
 
 /**
@@ -105,6 +107,8 @@ public class ChildGridView extends RecyclerView{
 
     public ChildGridView(Context context) {
         super(new ContextThemeWrapper(context, R.style.ScrollbarRecyclerView));
+        setItemViewCacheSize(0);
+        setFocusable(false);
         mOnRepeatedKeyInterceptListener = new OnRepeatedKeyInterceptListener(this);
 //        super(context);
         setHasFixedSize(true);
@@ -132,7 +136,12 @@ public class ChildGridView extends RecyclerView{
         setAdapter(new ChildGridAdapter(this));
     }
 
-
+    @Override
+    public void onScrolled(int dx, int dy) {
+        super.onScrolled(dx, dy);
+        updateChildVisibleArea();
+        Log.i("Godwin", "updateChildVisibleArea");
+    }
 
     /*package*/
     public void addViewToAdapter(GridItem child, int index) {
@@ -323,6 +332,18 @@ public class ChildGridView extends RecyclerView{
             setItemAnimator(animator);
         } else {
             setItemAnimator(null);
+        }
+    }
+
+    private void updateChildVisibleArea() {
+        for (int i = 0; i < getChildCount(); ++i) {
+            RecyclableWrapperViewGroupChild child = (RecyclableWrapperViewGroupChild) getChildAt(i);
+            if(((GridItem) child.getChildAt(0)).getChildAt(0) instanceof  ShowView){
+                ShowView showView = (ShowView) ((GridItem) child.getChildAt(0)).getChildAt(0);
+                if (getLeft() < child.getRight() && child.getLeft() < getRight()) {
+                    showView.updateVisibleArea();
+                }
+            }
         }
     }
 }
