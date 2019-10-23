@@ -27,9 +27,4 @@ public class ProgramRowViewManager extends ViewGroupManager<ProgramRowView> {
     protected ProgramRowView createViewInstance(@NonNull ThemedReactContext reactContext) {
         return new ProgramRowView(reactContext);
     }
-
-    @Override
-    public void addView(ProgramRowView parent, View child, int index) {
-        super.addView(parent, child, index);
-    }
 }

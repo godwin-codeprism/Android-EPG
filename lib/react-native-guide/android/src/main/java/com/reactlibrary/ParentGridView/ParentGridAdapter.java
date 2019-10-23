@@ -72,13 +72,6 @@ public class ParentGridAdapter extends RecyclerView.Adapter<ParentGridAdapter.Pa
             }
             vg.addView(row, 0);
         }
-//            ProgramRowView rowView = (ProgramRowView) row.getChildAt(0);
-//            ChildGridView childGridView = (ChildGridView) ((ReactViewGroup) rowView.getChildAt(1)).getChildAt(0);
-//            if (!GlobalScrollController.globalDx.equals(childGridView.getScrollOffset())) {
-//                childGridView.scrollBy(GlobalScrollController.globalDx - childGridView.getScrollOffset(), GlobalScrollController.globalDy);
-//                childGridView.setScrollOffset(GlobalScrollController.globalDx);
-//            }
-//        }
     }
 
     @Override

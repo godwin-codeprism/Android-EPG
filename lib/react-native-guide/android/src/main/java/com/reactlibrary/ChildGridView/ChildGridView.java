@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.ContextThemeWrapper;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.ItemTouchHelper.Callback;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +33,7 @@ import com.reactlibrary.ShowView.ShowView;
 import com.reactlibrary.Utils.GlobalScrollController;
 import com.reactlibrary.Utils.HorizontalItemDecorator;
 import com.reactlibrary.Utils.OnRepeatedKeyInterceptListener;
+import com.reactlibrary.Utils.RecyclableWrapperViewGroup;
 import com.reactlibrary.Utils.RecyclableWrapperViewGroupChild;
 import com.reactlibrary.Utils.VerticalItemDecorator;
 import com.reactlibrary.Utils.VisibleItemsChangeEvent;
@@ -38,11 +42,13 @@ import com.reactlibrary.Utils.VisibleItemsChangeEvent;
  * Created by Godwin Vinny Carole K on Wed, 09 Oct 2019 at 20:42.
  * Copyright (c) Code Prism Technologies Pvt Ltd
  */
-public class ChildGridView extends RecyclerView{
+public class ChildGridView extends RecyclerView {
     private final OnScrollDispatchHelper mOnScrollDispatchHelper = new OnScrollDispatchHelper();
     private final VelocityHelper mVelocityHelper = new VelocityHelper();
     private final OnRepeatedKeyInterceptListener mOnRepeatedKeyInterceptListener;
     private Integer scrollOffset = 0;
+    private LinearLayoutManager linearLayoutManager;
+    private  int xscrolling = 0;
 
     public Integer getScrollOffset() {
         return scrollOffset;
@@ -110,21 +116,19 @@ public class ChildGridView extends RecyclerView{
         setItemViewCacheSize(0);
         setFocusable(false);
         mOnRepeatedKeyInterceptListener = new OnRepeatedKeyInterceptListener(this);
-//        super(context);
         setHasFixedSize(true);
-        ((DefaultItemAnimator)getItemAnimator()).setSupportsChangeAnimations(false);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context){
+        ((DefaultItemAnimator) getItemAnimator()).setSupportsChangeAnimations(false);
+        linearLayoutManager = new LinearLayoutManager(context) {
             @Override
             public boolean onRequestChildFocus(@NonNull RecyclerView parent, @NonNull State state, @NonNull View child, @Nullable View focused) {
-                if(GlobalScrollController.listener != null){
-                        if(child instanceof RecyclableWrapperViewGroupChild && getFocusedChild() != null){
-                            final int currentIndex = ((RecyclableWrapperViewGroupChild) child).getChildIndex();
-                            if(findLastVisibleItemPosition() == currentIndex - 1){
-                                GlobalScrollController.listener.syncScrollBy(child.getMeasuredWidth(),0);
-                            }else if(findFirstVisibleItemPosition() == currentIndex + 1){
-                                GlobalScrollController.listener.syncScrollBy(-child.getMeasuredWidth(),0);
-                            }
+                if (GlobalScrollController.listener != null) {
+                    if (child instanceof RecyclableWrapperViewGroupChild && getFocusedChild() != null) {
+                        if(child.getRight() > getRight()){
+                            GlobalScrollController.listener.syncScrollBy(child.getRight() - getRight(), 0, 0, false);
+                        } else if (child.getLeft() < 0) {
+                            GlobalScrollController.listener.syncScrollBy(child.getLeft(), 0, 0, false);
                         }
+                    }
                 }
 //                super.onRequestChildFocus(parent,state,child,focused);
                 return true;
@@ -134,13 +138,33 @@ public class ChildGridView extends RecyclerView{
         linearLayoutManager.setOrientation(HORIZONTAL);
         setLayoutManager(linearLayoutManager);
         setAdapter(new ChildGridAdapter(this));
+
+        setOnFlingListener(new OnFlingListener() {
+            @Override
+            public boolean onFling(int velocityX, int velocityY) {
+                return true;
+            }
+        });
     }
 
     @Override
     public void onScrolled(int dx, int dy) {
         super.onScrolled(dx, dy);
-        updateChildVisibleArea();
-        Log.i("Godwin", "updateChildVisibleArea");
+        xscrolling = dx;
+        RecyclableWrapperViewGroupChild child = (RecyclableWrapperViewGroupChild) getChildAt(0);
+        RecyclableWrapperViewGroupChild secondChild = (RecyclableWrapperViewGroupChild) getChildAt(1);
+        if (child != null && child.getChildAt(0) instanceof GridItem) {
+            if (((GridItem) child.getChildAt(0)).getChildAt(0) instanceof ShowView) {
+                ShowView showView = (ShowView) ((GridItem) child.getChildAt(0)).getChildAt(0);
+                ShowView secondShowView = (ShowView) ((GridItem) secondChild.getChildAt(0)).getChildAt(0);
+                secondShowView.stickTextToLeft(0);
+                if (child.getLeft() < 0) {
+                    showView.stickTextToLeft(Math.abs(child.getLeft()));
+                }else{
+                    showView.stickTextToLeft(0);
+                }
+            }
+        }
     }
 
     /*package*/
@@ -214,6 +238,8 @@ public class ChildGridView extends RecyclerView{
                             getWidth(),
                             getHeight()));
         }
+        GlobalScrollController.listener.syncScrollBy(xscrolling,0, getId(), false);
+
         return super.onTouchEvent(ev);
     }
 
@@ -240,6 +266,8 @@ public class ChildGridView extends RecyclerView{
     public void scrollToPosition(int position) {
         this.scrollToPosition(position, new ScrollOptions());
     }
+
+
 
     public void scrollToPosition(final int position, final ScrollOptions options) {
         if (options.viewPosition != null) {
@@ -274,6 +302,8 @@ public class ChildGridView extends RecyclerView{
 
         super.scrollToPosition(position);
     }
+
+
 
     @Override
     public void smoothScrollToPosition(int position) {
@@ -332,18 +362,6 @@ public class ChildGridView extends RecyclerView{
             setItemAnimator(animator);
         } else {
             setItemAnimator(null);
-        }
-    }
-
-    private void updateChildVisibleArea() {
-        for (int i = 0; i < getChildCount(); ++i) {
-            RecyclableWrapperViewGroupChild child = (RecyclableWrapperViewGroupChild) getChildAt(i);
-            if(((GridItem) child.getChildAt(0)).getChildAt(0) instanceof  ShowView){
-                ShowView showView = (ShowView) ((GridItem) child.getChildAt(0)).getChildAt(0);
-                if (getLeft() < child.getRight() && child.getLeft() < getRight()) {
-                    showView.updateVisibleArea();
-                }
-            }
         }
     }
 }

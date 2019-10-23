@@ -9,5 +9,5 @@ import androidx.annotation.RequiresApi;
  * Copyright (c) Code Prism Technologies Pvt Ltd
  */
 public interface focusListener {
-    void scrollViewBy(int x, int y);
+    void scrollViewBy(int x, int y,int id, boolean shouldSmoothScroll);
 }

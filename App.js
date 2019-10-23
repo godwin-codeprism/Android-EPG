@@ -7,11 +7,11 @@ import {
   Image,
   Dimensions
 } from 'react-native';
-import { EPGView, DataSource, ProgramRowView, ChannelView, HorizontalGridView, ShowView } from 'react-native-guide';
+import { EPGView, DataSource, ProgramRowView, ChannelView, HorizontalGridView, ShowView, ExpandedView } from 'react-native-guide';
 
 
 const channelsData = new DataSource(Array.from({ length: 50 }, (i, x) => `Channel ${x}`), item => item);
-const showsData = new DataSource(Array.from({ length: 48 }, (i, x) => `Show ${x}`), item => item);
+const showsData = new DataSource(Array.from({ length: 48 }, (i, x) => `Now Showing ${x}`), item => item);
 
 const timeBlocksData = new DataSource(new Array(24).fill('i').map((i, x) => x).reduce((a, i) => [...a, i + ":00", i + ":30"], []), item => item);
 
@@ -38,28 +38,32 @@ class App extends React.Component {
             )}
             programRows={channelsData}
             renderProgramRows={({ item, index }) => (
-              <ProgramRowView style={{ width: '100%', height: 40, backgroundColor: 'orange', flexDirection: 'row' }}>
-                <ChannelView style={{ width: '10%', height: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center' }}>
-                  <Image source={require('./assets/img/channel_logo_placeholder_72x54.png')} style={{ height: 15, width: 20 }} />
-                  <Text style={{ color: 'white' }}>{item}</Text>
-                </ChannelView>
-                <View style={{ width: '90%', backgroundColor: 'black' }}>
-                  <HorizontalGridView
-                    showBlocks={showsData}
-                    renderShowBlocks={({ item, index }) => (
-                      <ShowView style={{ width: Math.round(Math.random() * (500 - 100 + 1) + 100), height: 40, justifyContent: 'center', alignItems: 'center' }}
-                        showName={item}
-                        marginLeft={3}
-                        marginTop={3}
-                        marginRight={3}
-                        marginBottom={3}
-                        activeBgColor='#4d4d4d'
-                        bgColor="#282828"
-                      />
-                      // <ShowView style={{ width: 135, height: 40, justifyContent: 'center', alignItems: 'center' }} showName={item} />
-                    )}
-                  />
+              <ProgramRowView style={{ width: '100%', backgroundColor: 'transparent' }}>
+                <View style={{ width: "100%", height: 40, flexDirection: 'row' }}>
+                  <ChannelView style={{ width: '10%', height: 40, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={require('./assets/img/channel_logo_placeholder_72x54.png')} style={{ height: 15, width: 20 }} />
+                    <Text style={{ color: 'white' }}>{item}</Text>
+                  </ChannelView>
+                  <View style={{ width: '90%', backgroundColor: 'black', height: 40 }}>
+                    <HorizontalGridView
+                      showBlocks={showsData}
+                      renderShowBlocks={({ item, index }) => (
+                        <ShowView style={{ width: Math.round(Math.random() * (500 - 100 + 1) + 100), height: 40, justifyContent: 'center', alignItems: 'center' }}
+                          showName={item}
+                          marginLeft={3}
+                          marginTop={3}
+                          marginRight={3}
+                          marginBottom={3}
+                          activeBgColor='#4d4d4d'
+                          bgColor="#282828"
+                        />
+                      )}
+                    />
+                  </View>
                 </View>
+                {/* <ExpandedView style={{ width: '100%', height: 200, backgroundColor: 'green' }}>
+                  <Text>Godwin Vinny Carole</Text>
+                </ExpandedView> */}
               </ProgramRowView>
             )}
           />

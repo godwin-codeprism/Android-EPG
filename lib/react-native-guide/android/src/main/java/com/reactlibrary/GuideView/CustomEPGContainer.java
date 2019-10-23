@@ -26,9 +26,9 @@ public class CustomEPGContainer extends LinearLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public void childScrolledBy(int x, int y){
+    public void childScrolledBy(int x, int y,int id, boolean shouldSmoothScroll){
         if(listener != null){
-            listener.scrollViewBy(x,y);
+            listener.scrollViewBy(x,y,id, shouldSmoothScroll);
         }
     }
 

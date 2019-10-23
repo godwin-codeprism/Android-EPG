@@ -11,6 +11,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.reactlibrary.ChannelView.ChannelViewManager;
+import com.reactlibrary.ExpandedView.ExpandedViewManager;
 import com.reactlibrary.ParentGridView.ParentGridViewManager;
 import com.reactlibrary.ChildGridView.ChildGridViewManager;
 import com.reactlibrary.GridItem.GridItemManager;
@@ -37,7 +38,8 @@ public class GuidePackage implements ReactPackage {
                 new ChildGridViewManager(),
                 new GridItemManager(),
                 new ShowViewManager(),
-                new TimelineViewManager()
+                new TimelineViewManager(),
+                new ExpandedViewManager()
         );
     }
 }

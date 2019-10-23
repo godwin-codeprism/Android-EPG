@@ -130,6 +130,12 @@ public class ParentGridView extends RecyclerView implements GlobalScrollControll
         setItemViewCacheSize(0);
         setLayoutManager(linearLayoutManager);
         setAdapter(new ParentGridAdapter(this,this));
+        setOnFlingListener(new OnFlingListener() {
+            @Override
+            public boolean onFling(int velocityX, int velocityY) {
+                return true;
+            }
+        });
         setClipToPadding(false);
     }
 
@@ -334,9 +340,9 @@ public class ParentGridView extends RecyclerView implements GlobalScrollControll
 
 
     @Override
-    public void syncScrollBy(int x, int y) {
+    public void syncScrollBy(int x, int y, int id, boolean shouldSmoothScroll) {
         GlobalScrollController.globalDx += x;
         GlobalScrollController.globalDy += y;
-        ((CustomEPGContainer)getParent()).childScrolledBy(x,y);
+        ((CustomEPGContainer)getParent()).childScrolledBy(x,y,id, shouldSmoothScroll);
     }
 }
