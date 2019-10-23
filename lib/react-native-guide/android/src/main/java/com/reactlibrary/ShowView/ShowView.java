@@ -12,10 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.facebook.react.views.text.ReactTextView;
 
 import org.w3c.dom.Text;
 
@@ -77,8 +78,12 @@ import org.w3c.dom.Text;
 
 public class ShowView extends FrameLayout {
 
-    private TextView itemTitle;
+    private ReactTextView itemTitle;
     private static int sItemPadding;
+    private LayoutParams titleLayoutParams;
+
+    private int mBgColor;
+    private int mActiveBgColor;
 
     // If set this flag disables requests to re-layout the parent view as a result of changing
     // this view, improving performance. This also prevents the parent view to lose child focus
@@ -90,19 +95,51 @@ public class ShowView extends FrameLayout {
         setFocusable(true);
         setOnClickListener(ON_CLICKED);
         setOnFocusChangeListener(ON_FOCUS_CHANGED);
-        itemTitle = new TextView(context);
-        LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        layoutParams.setMargins(0,0,5,5);
+        itemTitle = new ReactTextView(context);
+        titleLayoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
         itemTitle.setGravity(Gravity.CENTER_VERTICAL);
-        itemTitle.setLayoutParams(layoutParams);
-        itemTitle.setText("Godwin VC");
+        itemTitle.setLayoutParams(titleLayoutParams);
+        itemTitle.setText("No info avaibale");
         itemTitle.setTextColor(Color.WHITE);
-        itemTitle.setBackgroundColor(Color.BLUE);
         addView(itemTitle);
     }
 
-    public TextView getItemTitle() {
+    public ReactTextView getItemTitle() {
         return itemTitle;
+    }
+
+    public void setMarginLeft(int mMarginLeft) {
+        titleLayoutParams.leftMargin = mMarginLeft;
+    }
+
+    public void setMarginTop(int mMarginTop) {
+        titleLayoutParams.topMargin = mMarginTop;
+    }
+
+    public void setMarginRight(int mMarginRight) {
+        titleLayoutParams.rightMargin = mMarginRight;
+    }
+
+    public void setMarginBottom(int mMarginBottom) {
+        titleLayoutParams.bottomMargin = mMarginBottom;
+    }
+
+    public int getBgColor() {
+        return mBgColor;
+    }
+
+    public void setBgColor(int mBgColor) {
+        itemTitle.setBackgroundColor(mBgColor);
+        this.mBgColor = mBgColor;
+    }
+
+    public int getActiveBgColor() {
+        return mActiveBgColor;
+    }
+
+    public void setActiveBgColor(int mActiveBgColor) {
+        this.mActiveBgColor = mActiveBgColor;
     }
 
     private static final View.OnClickListener ON_CLICKED =
@@ -118,13 +155,13 @@ public class ShowView extends FrameLayout {
                 @Override
                 public void onFocusChange(View view, boolean hasFocus) {
                     ShowView showView = (ShowView) view;
-                    TextView itemTitle = showView.getItemTitle();
+                    ReactTextView itemTitle = showView.getItemTitle();
                     if (hasFocus) {
                         itemTitle.setTextColor(Color.BLACK);
-                        itemTitle.setBackgroundColor(Color.WHITE);
+                        itemTitle.setBackgroundColor(showView.getActiveBgColor());
                     } else {
                         itemTitle.setTextColor(Color.WHITE);
-                        itemTitle.setBackgroundColor(Color.BLUE);
+                        itemTitle.setBackgroundColor(showView.getBgColor());
                     }
                 }
             };
@@ -133,7 +170,9 @@ public class ShowView extends FrameLayout {
         itemTitle.setText(showName);
     }
 
-    /** Update programItemView to handle alignments of text. */
+    /**
+     * Update programItemView to handle alignments of text.
+     */
     public void updateVisibleArea() {
         View parentView = ((View) getParent());
         if (parentView == null) {
@@ -155,7 +194,7 @@ public class ShowView extends FrameLayout {
      * Episode title is visible only if title isn't multi-line.
      *
      * @param startOffset Offset of the start position from the enclosing view's start position.
-     * @param endOffset Offset of the end position from the enclosing view's end position.
+     * @param endOffset   Offset of the end position from the enclosing view's end position.
      */
     private void layoutVisibleArea(int startOffset, int endOffset) {
         int width = getWidth();
